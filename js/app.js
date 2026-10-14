@@ -42,11 +42,37 @@ $('#theme').onclick = () => {
   toast(`Theme: ${S.cfg.theme}`);
 };
 
-$('#logout').onclick = () => {
-  sessionStorage.removeItem('rb-auth');
-  $('#app').hidden = true;
-  $('#login').hidden = false;
-};
+// Logout Modal Handling
+const logoutBtn = $('#logout');
+const logoutDlg = $('#logoutDlg');
+const confirmLogoutBtn = $('#confirmLogoutBtn');
+const cancelLogoutBtn = $('#cancelLogoutBtn');
+const closeLogoutDlg = $('#closeLogoutDlg');
+
+if (logoutBtn && logoutDlg) {
+  // Open modal when header Log out button is clicked
+  logoutBtn.onclick = () => logoutDlg.showModal();
+
+  const closeDlg = () => logoutDlg.close();
+
+  if (cancelLogoutBtn) cancelLogoutBtn.onclick = closeDlg;
+  if (closeLogoutDlg) closeLogoutDlg.onclick = closeDlg;
+
+  // Close modal when clicking outside backdrop
+  logoutDlg.onclick = e => {
+    if (e.target === logoutDlg) closeDlg();
+  };
+
+  // Perform logout upon confirmation
+  if (confirmLogoutBtn) {
+    confirmLogoutBtn.onclick = () => {
+      logoutDlg.close();
+      $('#app').hidden = true;
+      $('#login').hidden = false;
+      toast('Logged out successfully');
+    };
+  }
+}
 
 // Initialize static view listeners
 initSubscriptionsEvents();

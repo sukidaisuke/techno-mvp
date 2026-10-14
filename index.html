@@ -254,6 +254,22 @@
 <dialog id="det"></dialog>
 <div id="toast" role="status"></div>
 
+<dialog id="logoutDlg">
+  <div class="pad">
+    <div class="dh">
+      <h3>Confirm Log Out</h3>
+      <button type="button" class="btn ghost" id="closeLogoutDlg">✕</button>
+    </div>
+    <p class="muted" style="margin: 16px 0; text-align: left;">
+      Are you sure you want to log out of REWIND? You will need to log back in to access your subscriptions.
+    </p>
+    <div class="end">
+      <button type="button" class="btn" id="cancelLogoutBtn">Cancel</button>
+      <button type="button" class="btn danger" id="confirmLogoutBtn">Log Out</button>
+    </div>
+  </div>
+</dialog>
+
 <script type="module" src="js/app.js"></script>
 </body>
 </html>
