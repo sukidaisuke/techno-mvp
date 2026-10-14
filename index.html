@@ -10,7 +10,6 @@
 
 <section id="login" class="login-wrapper" hidden>
   <div class="login-container">
-    <!-- Left Hero Column -->
     <div class="login-hero">
       <div class="hero-brand">
         <img src="img/logo.svg" alt="REWIND Logo" class="brand-logo-img">
@@ -41,13 +40,12 @@
           <div class="feature-icon">💱</div>
           <div>
             <strong>Multi-Currency Exchange</strong>
-            <p>Automatic conversion across 9 global currencies.</p>
+            <p>Automatic conversion across 10 global currencies.</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Right Card Column (Sign In & Sign Up) -->
     <div class="login-card">
       <div class="auth-tabs">
         <button type="button" class="auth-tab active" id="tabSignin">Log In</button>
@@ -59,7 +57,6 @@
         <span class="badge-text">Default login: <strong>admin</strong> / <strong>admin</strong></span>
       </div>
 
-      <!-- Log In Form -->
       <form id="loginForm">
         <div class="form-group">
           <label for="usernameInput">Username</label>
@@ -94,7 +91,6 @@
         </p>
       </form>
 
-      <!-- Sign Up Form -->
       <form id="signupForm" hidden>
         <div class="form-group">
           <label for="regUsernameInput">Username</label>
@@ -169,7 +165,9 @@
         </div>
         <span class="row">
           <button class="btn primary" id="add">+ Add</button>
-          <button class="btn" id="exp">Export</button>
+          <button class="btn" id="expIcs" title="Export Calendar (.ics)">📅 Sync Calendar</button>
+          <button class="btn" id="expCsv" title="Export CSV Spreadsheet">📊 Export CSV</button>
+          <button class="btn" id="exp">Export JSON</button>
           <label class="btn">Import<input type="file" id="imp" accept=".json" hidden></label>
         </span>
       </div>
@@ -208,11 +206,11 @@
   <form id="f" class="pad">
     <div class="dh"><h3 id="ft"></h3><button type="button" class="btn ghost" data-x>✕</button></div>
     <div class="fg">
-      <label>Name<input name="name" required></label>
+      <label>Name<input name="name" required placeholder="e.g. Netflix"></label>
       <label>Plan<input name="plan" required placeholder="e.g. Premium"></label>
       <label>Category<select name="categoryId"></select></label>
       <label>Payment method<select name="paymentMethodId"></select></label>
-      <label>Amount<input name="amount" type="number" min="0" step="0.01" required></label>
+      <label>Total Amount<input name="amount" type="number" min="0" step="0.01" required></label>
       <label>Currency<select name="currency"></select></label>
       <label>Billing cycle
         <select name="billingCycle">
@@ -223,14 +221,27 @@
         </select>
       </label>
       <label>Status
-        <select name="status"><option>active</option><option>trial</option><option>cancelled</option></select>
+        <select name="status"><option value="active">active</option><option value="trial">trial</option><option value="cancelled">cancelled</option></select>
       </label>
       <label>Start date<input name="startDate" type="date" required></label>
       <label>Next payment<input name="nextBillingDate" type="date"></label>
       <label>Renewal
         <select name="renewalType"><option value="manual">Manual</option><option value="auto">Automatic</option></select>
       </label>
-      <label>Website<input name="website" type="url" placeholder="https://"></label>
+      <label>Website<input name="website" type="url" placeholder="https://netflix.com"></label>
+
+      <!-- Split Bill Option -->
+      <div class="full shared-split-box">
+        <label class="chk">
+          <input type="checkbox" name="isShared" id="isSharedChk">
+          <span><b>Split Bill / Shared Subscription</b></span>
+        </label>
+        <div class="fg" id="splitFields" style="margin-top:10px; display:none;">
+          <label>People Sharing<input name="splitCount" type="number" min="1" value="2"></label>
+          <label>Your Share (%)<input name="mySharePct" type="number" min="1" max="100" value="50"></label>
+        </div>
+      </div>
+
       <label class="full">Notes<textarea name="notes" rows="2"></textarea></label>
     </div>
     <div class="end">

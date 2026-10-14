@@ -1,7 +1,7 @@
 'use strict';
 
 import { $,$$, esc, today, days, add, nextFrom, fill, toast, dl } from '../core/utils.js';
-import { S, CY, CYC, save, genPays, renew, mu, lab } from '../core/store.js';
+import { S, CY, CYC, save, genPays, renew, mu, lab, userAmount, getLogoUrl } from '../core/store.js';
 
 const Q = { q: '', st: 'all', cat: '', cyc: '', asc: true };
 let E = null;
@@ -26,19 +26,27 @@ export const renderSubscriptions = () => {
         const d = days(s.nextBillingDate);
         const soon = s.status === 'active' && d <= 7;
         const dueText = d < 0 ? 'overdue' : d === 0 ? 'today' : `${d}d`;
+        const personalShare = userAmount(s);
+        const isSplit = s.isShared;
 
         return `
           <article class="card sub-card" data-id="${s.id}">
             <div class="sub-header">
               <div class="sub-title-group">
-                <h3 class="sub-name">${esc(s.name)}</h3>
-                <span class="badge ${s.status}">${s.status}</span>
+                <img src="${getLogoUrl(s)}" class="sub-card-logo" alt="" onerror="this.src='img/logo.svg'">
+                <div>
+                  <h3 class="sub-name">${esc(s.name)}</h3>
+                  <span class="sub-plan">${esc(s.plan || 'Standard')}</span>
+                </div>
               </div>
-              <span class="sub-plan">${esc(s.plan || 'Standard')}</span>
+              <span class="badge ${s.status}">${s.status}</span>
             </div>
 
             <div class="sub-price-row">
-              <div class="sub-amount">${mu(s.amount, s.currency)}</div>
+              <div>
+                <div class="sub-amount">${mu(personalShare, s.currency)}</div>
+                ${isSplit ? `<small class="muted">Total bill: ${mu(s.amount, s.currency)} (${s.mySharePct}% share)</small>` : ''}
+              </div>
               <span class="badge cyc">${s.billingCycle}</span>
             </div>
 
@@ -46,7 +54,7 @@ export const renderSubscriptions = () => {
               <li class="meta-item"><span>🏷 Category</span> <b>${esc(lab('cats', s.categoryId))}</b></li>
               <li class="meta-item"><span>📅 Next Billing</span> <b class="${soon ? 'warn' : ''}">${s.nextBillingDate} ${soon ? `<span class="badge due">${dueText}</span>` : ''}</b></li>
               <li class="meta-item"><span>💳 Payment</span> <b>${esc(lab('pms', s.paymentMethodId))}</b></li>
-              <li class="meta-item"><span>🔁 Renewal</span> <b>${s.renewalType === 'auto' ? 'Automatic' : 'Manual'}</b></li>
+              <li class="meta-item"><span>👥 Split Bill</span> <b>${isSplit ? `${s.splitCount} people (${s.mySharePct}%)` : 'No'}</b></li>
             </ul>
 
             <div class="sub-actions">
@@ -76,6 +84,15 @@ export const initSubscriptionsEvents = () => {
   $('#st').onclick = e => { const btn = e.target.closest('button'); if (!btn) return; const status = btn.dataset.s; if (!status) return; Q.st = status; $$('#st button').forEach(b => b.classList.toggle('active', b.dataset.s === status));
     renderSubscriptions();
   };
+
+  // Toggle Split Fields Visibility
+  const isSharedChk = $('#isSharedChk');
+  const splitFields = $('#splitFields');
+  if (isSharedChk && splitFields) {
+    isSharedChk.onchange = e => {
+      splitFields.style.display = e.target.checked ? 'grid' : 'none';
+    };
+  }
 
   $('#cards').onclick = e => {
     const card = e.target.closest('[data-id]');
@@ -108,6 +125,51 @@ export const initSubscriptionsEvents = () => {
     }
   };
 
+  // iCal Calendar Sync Export
+  $('#expIcs').onclick = () => {
+    const icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//REWIND Subscription Manager//EN',
+      ...S.subs.filter(s => s.status === 'active').map(s => {
+        const cleanDate = s.nextBillingDate.replace(/-/g, '');
+        return [
+          'BEGIN:VEVENT',
+          `SUMMARY:Renewal: ${s.name} (${mu(userAmount(s), s.currency)})`,
+          `DESCRIPTION:Subscription renewal for ${s.name} (${s.plan}). Category: ${lab('cats', s.categoryId)}.`,
+          `DTSTART;VALUE=DATE:${cleanDate}`,
+          `DTEND;VALUE=DATE:${cleanDate}`,
+          'END:VEVENT'
+        ].join('\r\n');
+      }),
+      'END:VCALENDAR'
+    ].join('\r\n');
+
+    dl(`subscriptions-renewals-${today()}.ics`, icsContent, 'text/calendar');
+    toast('Calendar .ics exported!');
+  };
+
+  // CSV Export
+  $('#expCsv').onclick = () => {
+    const headers = ['Name', 'Plan', 'Category', 'Billing Cycle', 'Total Amount', 'Your Share Amount', 'Currency', 'Next Billing Date', 'Status', 'Renewal Type'];
+    const rows = S.subs.map(s => [
+      `"${s.name.replace(/"/g, '""')}"`,
+      `"${(s.plan || 'Standard').replace(/"/g, '""')}"`,
+      `"${lab('cats', s.categoryId)}"`,
+      s.billingCycle,
+      s.amount,
+      userAmount(s),
+      s.currency,
+      s.nextBillingDate,
+      s.status,
+      s.renewalType
+    ]);
+
+    const csvText = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    dl(`subscriptions-${today()}.csv`, csvText, 'text/csv');
+    toast('CSV report exported!');
+  };
+
   $('#exp').onclick = () => dl(`subscriptions-${today()}.json`, S.subs);
 
   $('#imp').onchange = e => {
@@ -137,7 +199,11 @@ export const initSubscriptionsEvents = () => {
           status: ['active', 'trial', 'cancelled'].includes(rawItem.status) ? rawItem.status : 'active',
           renewalType: rawItem.renewalType === 'auto' ? 'auto' : 'manual',
           website: rawItem.website || '',
-          notes: rawItem.notes || ''
+          notes: rawItem.notes || '',
+          isShared: Boolean(rawItem.isShared),
+          splitCount: +rawItem.splitCount || 1,
+          mySharePct: +rawItem.mySharePct || 100,
+          priceHistory: Array.isArray(rawItem.priceHistory) ? rawItem.priceHistory : []
         };
         newSub.lastBillingDate = add(newSub.nextBillingDate, cycle, -1, CYC);
         S.subs.push(newSub);
@@ -166,12 +232,24 @@ const openForm = subId => {
   const initialValues = sub || {
     name: '', plan: '', categoryId: S.cats[0]?.id, paymentMethodId: S.pms[0]?.id,
     amount: '', currency: S.cfg.cur, billingCycle: 'monthly', status: 'active',
-    startDate: today(), nextBillingDate: nextFrom(today(), 'monthly', CYC), renewalType: 'manual', website: '', notes: ''
+    startDate: today(), nextBillingDate: nextFrom(today(), 'monthly', CYC), renewalType: 'manual',
+    website: '', notes: '', isShared: false, splitCount: 2, mySharePct: 50
   };
 
   Object.keys(initialValues).forEach(key => {
-    if (elements[key]) elements[key].value = initialValues[key] ?? '';
+    if (elements[key]) {
+      if (elements[key].type === 'checkbox') {
+        elements[key].checked = Boolean(initialValues[key]);
+      } else {
+        elements[key].value = initialValues[key] ?? '';
+      }
+    }
   });
+
+  const splitFields = $('#splitFields');
+  if (splitFields) {
+    splitFields.style.display = initialValues.isShared ? 'grid' : 'none';
+  }
 
   $('#dlg').showModal();
 };
@@ -187,17 +265,33 @@ $('#f').addEventListener('input', e => {
 $('#f').onsubmit = e => {
   e.preventDefault();
   const values = Object.fromEntries(new FormData($('#f')));
+  const isShared = $('#isSharedChk').checked;
 
   const subData = {
     name: values.name.trim(), plan: values.plan.trim(),
     categoryId: +values.categoryId, paymentMethodId: +values.paymentMethodId,
     amount: Math.max(0, +values.amount || 0), currency: values.currency, billingCycle: values.billingCycle,
     startDate: values.startDate, nextBillingDate: values.nextBillingDate || nextFrom(values.startDate, values.billingCycle, CYC),
-    status: values.status, renewalType: values.renewalType, website: values.website.trim(), notes: values.notes.trim()
+    status: values.status, renewalType: values.renewalType, website: values.website.trim(), notes: values.notes.trim(),
+    isShared,
+    splitCount: isShared ? Math.max(1, +values.splitCount || 1) : 1,
+    mySharePct: isShared ? Math.min(100, Math.max(1, +values.mySharePct || 100)) : 100
   };
 
   if (E) {
     const existingSub = S.subs.find(x => x.id === E);
+    if (!existingSub.priceHistory) existingSub.priceHistory = [];
+
+    // Price History Tracking
+    if (existingSub.amount !== subData.amount || existingSub.currency !== subData.currency) {
+      existingSub.priceHistory.push({
+        date: today(),
+        oldAmount: existingSub.amount,
+        newAmount: subData.amount,
+        currency: subData.currency
+      });
+    }
+
     const dateOrPriceChanged = ['startDate', 'billingCycle', 'nextBillingDate', 'amount', 'currency'].some(k => existingSub[k] !== subData[k]);
     Object.assign(existingSub, subData);
     if (dateOrPriceChanged) {
@@ -206,7 +300,12 @@ $('#f').onsubmit = e => {
     }
     toast('Subscription updated');
   } else {
-    const newSub = { id: S.id++, ...subData, lastBillingDate: add(subData.nextBillingDate, subData.billingCycle, -1, CYC) };
+    const newSub = {
+      id: S.id++,
+      ...subData,
+      lastBillingDate: add(subData.nextBillingDate, subData.billingCycle, -1, CYC),
+      priceHistory: []
+    };
     S.subs.push(newSub);
     genPays(newSub);
     toast('Subscription added');
@@ -232,17 +331,38 @@ const openDet = subId => {
     </div>
     <dl>
       <dt>Plan</dt><dd>${esc(sub.plan)}</dd>
-      <dt>Amount</dt><dd>${mu(sub.amount, sub.currency)} / ${sub.billingCycle}</dd>
+      <dt>Total Amount</dt><dd>${mu(sub.amount, sub.currency)} / ${sub.billingCycle}</dd>
+      <dt>Personal Share</dt><dd><b>${mu(userAmount(sub), sub.currency)}</b> (${sub.isShared ? sub.mySharePct + '%' : '100%'})</dd>
       <dt>Category</dt><dd>${esc(lab('cats', sub.categoryId))}</dd>
       <dt>Payment method</dt><dd>${esc(lab('pms', sub.paymentMethodId))}</dd>
       <dt>Renewal</dt><dd>${sub.renewalType === 'auto' ? 'Automatic' : 'Manual'}</dd>
-      <dt>Start date</dt><dd>${sub.startDate}</dd>
-      <dt>Last payment</dt><dd>${sub.lastBillingDate || '—'}</dd>
       <dt>Next payment</dt><dd>${sub.nextBillingDate}</dd>
       ${sub.website ? `<dt>Website</dt><dd><a href="${esc(sub.website)}" target="_blank" rel="noopener">${esc(sub.website)}</a></dd>` : ''}
-      ${sub.notes ? `<dt>Notes</dt><dd>${esc(sub.notes)}</dd>` : ''}
     </dl>
-    <div class="bar">
+
+    ${
+      sub.priceHistory && sub.priceHistory.length > 0
+        ? `
+        <div class="price-history-box">
+          <h4>Price Change History</h4>
+          <ul class="list">
+            ${sub.priceHistory
+              .map(
+                ph => `
+              <li>
+                <span>${ph.date}</span>
+                <span>${mu(ph.oldAmount, ph.currency)} → <b>${mu(ph.newAmount, ph.currency)}</b></span>
+              </li>
+            `
+              )
+              .join('')}
+          </ul>
+        </div>
+      `
+        : ''
+    }
+
+    <div class="bar" style="margin-top:14px;">
       <h4>Payment history (${payments.length})</h4>
       <button class="btn sm" data-act="addpay">+ Add payment</button>
     </div>
@@ -285,7 +405,7 @@ $('#det').onclick = e => {
   if (action === 'addpay') {
     const payDate = prompt('Payment date (YYYY-MM-DD)', today());
     if (!payDate || !/^\d{4}-\d{2}-\d{2}$/.test(payDate)) return;
-    const amountVal = parseFloat(prompt('Amount', sub.amount));
+    const amountVal = parseFloat(prompt('Amount', userAmount(sub)));
     if (!(amountVal >= 0)) return;
 
     S.pays.push({

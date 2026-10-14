@@ -26,15 +26,21 @@
   color-scheme: dark;
 }
 
+/* ---------- Soft Pink Glassmorphism Light Theme ("Rose Quartz") ---------- */
 .light {
-  --bg: #f8fafc;
-  --fg: #0f172a;
-  --card: rgba(255, 255, 255, 0.85);
-  --mut: #f1f5f9;
-  --mf: #64748b;
-  --bd: #e2e8f0;
-  --pr: #4f46e5;
+  --bg: #fdf4f8;
+  --fg: #2d182b;
+  --card: rgba(255, 255, 255, 0.78);
+  --mut: rgba(244, 114, 182, 0.1);
+  --mf: #8a6c86;
+  --bd: rgba(236, 72, 153, 0.18);
+  --pr: #ec4899;
   --pf: #ffffff;
+
+  --ok: #059669;
+  --wn: #d97706;
+  --er: #e11d48;
+  --in: #0284c7;
   color-scheme: light;
 }
 
@@ -53,6 +59,13 @@ body {
     radial-gradient(circle at 15% 10%, rgba(99, 102, 241, 0.12) 0%, transparent 45%),
     radial-gradient(circle at 85% 90%, rgba(56, 189, 248, 0.08) 0%, transparent 45%);
   background-attachment: fixed;
+}
+
+.light body {
+  background-image: 
+    radial-gradient(circle at 15% 10%, rgba(244, 114, 182, 0.22) 0%, transparent 48%),
+    radial-gradient(circle at 85% 90%, rgba(192, 132, 252, 0.18) 0%, transparent 48%),
+    radial-gradient(circle at 50% 50%, rgba(251, 207, 232, 0.25) 0%, transparent 70%);
 }
 
 h1, h2, h3, h4 {
@@ -98,6 +111,11 @@ header {
   border-bottom: 1px solid var(--bd);
 }
 
+.light header {
+  background: rgba(253, 244, 248, 0.8);
+  border-bottom: 1px solid rgba(236, 72, 153, 0.18);
+}
+
 .logo-wrapper {
   display: flex;
   align-items: center;
@@ -117,6 +135,13 @@ header {
   font-size: 1.2rem;
   font-weight: 700;
   background: linear-gradient(135deg, var(--fg) 50%, #6366f1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.light .logo {
+  background: linear-gradient(135deg, #2d182b 30%, #ec4899 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -155,6 +180,13 @@ nav button.on {
   color: #ffffff;
   border: 1px solid rgba(99, 102, 241, 0.4);
   box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+}
+
+.light nav button.on {
+  background: rgba(236, 72, 153, 0.15);
+  color: #db2777;
+  border: 1px solid rgba(236, 72, 153, 0.4);
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.2);
 }
 
 .nav-actions {
@@ -216,6 +248,12 @@ main {
   border-color: rgba(255, 255, 255, 0.2);
 }
 
+.btn.primary {
+  background: var(--pr);
+  color: #ffffff;
+  border-color: transparent;
+}
+
 .btn.ghost {
   border-color: transparent;
   background: none;
@@ -231,7 +269,7 @@ main {
   border-radius: 6px;
 }
 
-/* ---------- Dashboard Cards Layout (Static Glass Cards - No Beam) ---------- */
+/* ---------- Cards Layout ---------- */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -252,7 +290,6 @@ main {
   margin-bottom: 24px;
 }
 
-/* Dashboard Clean Glass Card Base */
 .card {
   position: relative;
   background: var(--card);
@@ -275,7 +312,15 @@ main {
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
 }
 
-/* Stat Card Inner Styles */
+.light .card {
+  box-shadow: 0 10px 30px rgba(236, 72, 153, 0.05);
+}
+
+.light .card:hover {
+  border-color: rgba(236, 72, 153, 0.35);
+  box-shadow: 0 12px 32px rgba(236, 72, 153, 0.12);
+}
+
 .stat-card {
   display: flex;
   flex-direction: column;
@@ -296,6 +341,11 @@ main {
   justify-content: center;
   font-size: 1.5rem;
   flex-shrink: 0;
+}
+
+.light .stat-icon {
+  background: rgba(236, 72, 153, 0.12);
+  border: 1px solid rgba(236, 72, 153, 0.25);
 }
 
 .stat-info {
@@ -324,27 +374,32 @@ main {
   -webkit-text-fill-color: transparent;
 }
 
-/* Inner Card Lists & Items */
-.list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
+.light .stat-info b {
+  background: linear-gradient(135deg, #2d182b 40%, #db2777 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.list li {
+.sub-card-logo,
+.sub-logo-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--bd);
+  background: var(--mut);
+}
+
+.list-row-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 12px 14px;
+  gap: 12px;
+  padding: 10px 12px;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--bd);
   border-radius: 12px;
-  text-align: center;
-  width: 100%;
+  margin-bottom: 8px;
 }
 
 .empty-box {
@@ -387,6 +442,10 @@ main {
   background: linear-gradient(90deg, #6366f1 0%, #38bdf8 100%);
 }
 
+.light .pct i {
+  background: linear-gradient(90deg, #ec4899 0%, #d946ef 100%);
+}
+
 /* Badges */
 .badge {
   display: inline-flex;
@@ -406,6 +465,12 @@ main {
   border-color: rgba(16, 185, 129, 0.3);
 }
 
+.light .badge.active {
+  background: rgba(5, 150, 105, 0.15);
+  color: #059669;
+  border-color: rgba(5, 150, 105, 0.3);
+}
+
 .badge.due {
   background: rgba(245, 158, 11, 0.15);
   color: #fbbf24;
@@ -416,6 +481,150 @@ main {
   background: rgba(239, 68, 68, 0.15);
   color: #f87171;
   border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* ---------- Free Trial Expiration Guard Card ---------- */
+.trial-guard-card {
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--r);
+  padding: 18px 22px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.trial-guard-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.trial-guard-icon {
+  font-size: 1.6rem;
+}
+
+.trial-guard-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.trial-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--bd);
+  padding: 10px 14px;
+  border-radius: 12px;
+}
+
+/* ---------- Interactive Renewal Calendar Grid ---------- */
+.calendar-card {
+  align-items: stretch;
+  text-align: left;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  width: 100%;
+}
+
+.cal-day-head {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--mf);
+  padding: 4px 0;
+  text-transform: uppercase;
+}
+
+.cal-day {
+  min-height: 70px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cal-day.today {
+  border-color: var(--pr);
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.cal-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--mf);
+}
+
+.cal-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  padding: 2px 5px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #ffffff;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.cal-logo {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+/* ---------- Trimming & Savings Simulator ---------- */
+.sim-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+.sim-stat {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+
+.sim-checklist {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.sim-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.sim-item.disabled {
+  opacity: 0.4;
+  text-decoration: line-through;
 }
 
 /* ---------- Login Page with Rotating Neon Outline ---------- */
@@ -490,6 +699,13 @@ main {
   -webkit-text-fill-color: transparent;
 }
 
+.light .hero-title {
+  background: linear-gradient(135deg, #2d182b 30%, #ec4899 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .hero-desc {
   font-size: 1.05rem;
   line-height: 1.6;
@@ -498,7 +714,6 @@ main {
   max-width: 520px;
 }
 
-/* Compact Left Hero Features */
 .hero-features {
   display: flex;
   flex-direction: column;
@@ -555,7 +770,11 @@ main {
   gap: 18px;
 }
 
-/* Moving Light Beam ONLY on Login Card Outline */
+.light .login-card {
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 20px 45px rgba(236, 72, 153, 0.12);
+}
+
 .login-card::before {
   content: '';
   position: absolute;
@@ -578,6 +797,19 @@ main {
   filter: drop-shadow(0 0 6px #38bdf8);
   animation: spin-beam 4s linear infinite;
   z-index: 2;
+}
+
+.light .login-card::before {
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 0deg,
+    transparent 240deg,
+    #ec4899 280deg,
+    #f43f5e 310deg,
+    #d946ef 340deg,
+    transparent 360deg
+  );
+  filter: drop-shadow(0 0 8px rgba(236, 72, 153, 0.55));
 }
 
 .auth-tabs {
@@ -651,11 +883,26 @@ input, select, textarea {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.light input,
+.light select,
+.light textarea {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(236, 72, 153, 0.2);
+  color: #2d182b;
+}
+
 .input-wrapper input:focus,
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: #6366f1;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+.light input:focus,
+.light select:focus,
+.light textarea:focus {
+  border-color: #ec4899;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
 }
 
 .pw-toggle {
@@ -668,7 +915,6 @@ input:focus, select:focus, textarea:focus {
   cursor: pointer;
 }
 
-/* Full-Width Bright White Login Submit Button */
 .login-btn {
   width: 100%;
   height: 48px;
@@ -688,10 +934,21 @@ input:focus, select:focus, textarea:focus {
   transition: all 0.2s ease;
 }
 
+.light .login-btn {
+  background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 18px rgba(236, 72, 153, 0.35);
+}
+
 .login-btn:hover {
   background: #f1f5f9;
   transform: translateY(-1px);
   box-shadow: 0 6px 22px rgba(255, 255, 255, 0.25);
+}
+
+.light .login-btn:hover {
+  background: linear-gradient(135deg, #db2777 0%, #c026d3 100%);
+  box-shadow: 0 6px 22px rgba(236, 72, 153, 0.45);
 }
 
 .login-btn:active {
@@ -711,31 +968,8 @@ input:focus, select:focus, textarea:focus {
   font-weight: 600;
 }
 
-/* Mobile Adjustments */
-@media (max-width: 900px) {
-  header {
-    flex-wrap: wrap;
-    padding: 12px 16px;
-  }
-
-  nav {
-    order: 3;
-    flex-basis: 100%;
-    overflow-x: auto;
-  }
-
-  main {
-    padding: 16px 12px;
-  }
-
-  .login-container {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-
-  .hero-features {
-    display: none;
-  }
+.light .auth-switch-text a {
+  color: #ec4899;
 }
 
 /* ---------- Toast Notifications ---------- */
@@ -760,6 +994,12 @@ input:focus, select:focus, textarea:focus {
   font-weight: 500;
 }
 
+.light #toast {
+  background: rgba(253, 244, 248, 0.95);
+  color: #2d182b;
+  border-color: rgba(236, 72, 153, 0.35);
+}
+
 #toast.show {
   opacity: 1;
   transform: translate(-50%, 0);
@@ -776,6 +1016,12 @@ dialog {
   max-height: 90vh;
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+}
+
+.light dialog {
+  background: rgba(253, 244, 248, 0.95);
+  border-color: rgba(236, 72, 153, 0.2);
+  color: #2d182b;
 }
 
 dialog::backdrop {
@@ -841,7 +1087,6 @@ select {
   cursor: pointer;
 }
 
-/* Fix Dropdown Menu Item Colors */
 select option {
   background-color: #12141d;
   color: #f8fafc;
@@ -849,8 +1094,8 @@ select option {
 }
 
 .light select option {
-  background-color: #ffffff;
-  color: #0f172a;
+  background-color: #fdf2f8;
+  color: #2d182b;
 }
 
 /* Monthly Trend Bar Chart Styling */
@@ -886,6 +1131,11 @@ select option {
   min-height: 4px;
   box-shadow: 0 0 10px rgba(99, 102, 241, 0.25);
   transition: height 0.3s ease, opacity 0.2s ease;
+}
+
+.light .bars i {
+  background: linear-gradient(180deg, #ec4899 0%, #f43f5e 100%);
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.25);
 }
 
 .bars div:hover i {
@@ -957,6 +1207,13 @@ select option {
   color: #ffffff;
   border: 1px solid rgba(99, 102, 241, 0.4);
   box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+}
+
+.light .status-tabs .auth-tab.active {
+  background: rgba(236, 72, 153, 0.18);
+  color: #db2777;
+  border: 1px solid rgba(236, 72, 153, 0.35);
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.15);
 }
 
 /* Subscription Card Redesign */
@@ -1136,8 +1393,16 @@ select option {
   color: #34d399 !important;
 }
 
+.light .balance-positive {
+  color: #059669 !important;
+}
+
 .balance-negative {
   color: #f87171 !important;
+}
+
+.light .balance-negative {
+  color: #e11d48 !important;
 }
 
 .budget-progress-container {
@@ -1165,10 +1430,173 @@ select option {
   background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
 }
 
+.light .budget-bar-fill.healthy {
+  background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+}
+
 .budget-bar-fill.warning {
   background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
 }
 
 .budget-bar-fill.danger {
   background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+}
+
+.light .budget-bar-fill.danger {
+  background: linear-gradient(90deg, #e11d48 0%, #f43f5e 100%);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 900px) {
+  header {
+    flex-wrap: wrap;
+    padding: 12px 16px;
+  }
+
+  nav {
+    order: 3;
+    flex-basis: 100%;
+    overflow-x: auto;
+  }
+
+  main {
+    padding: 16px 12px;
+  }
+
+  .login-container {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .hero-features {
+    display: none;
+  }
+}
+
+/* ---------- Settings Grid & Card Redesign ---------- */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 20px;
+}
+
+.settings-card {
+  align-items: stretch;
+  text-align: left;
+  gap: 16px;
+  padding: 24px;
+}
+
+.card-header-left {
+  text-align: left;
+  width: 100%;
+}
+
+.card-header-left h3 {
+  text-align: left;
+  font-size: 1.15rem;
+  margin-bottom: 2px;
+  color: var(--fg);
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  width: 100%;
+}
+
+.setting-row div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.setting-row b {
+  font-size: 0.92rem;
+  color: var(--fg);
+}
+
+.setting-select {
+  width: auto;
+  min-width: 120px;
+  padding: 6px 32px 6px 12px;
+  font-size: 0.88rem;
+}
+
+.add-item-bar {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.add-item-bar input {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 0.88rem;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.settings-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  transition: background 0.15s ease;
+}
+
+.settings-item-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.item-label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--fg);
+}
+
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.danger-zone {
+  border-color: rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.03);
+}
+
+.chk-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--pr);
 }

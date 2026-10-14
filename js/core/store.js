@@ -16,6 +16,12 @@ export const CYC = { monthly: 1, quarterly: 3, semiannual: 6, yearly: 12 };
 
 const K = 'rewindbasis';
 
+export const userAmount = sub => {
+  if (!sub || !sub.isShared) return Number(sub?.amount) || 0;
+  const pct = Number(sub.mySharePct) || 100;
+  return ((Number(sub.amount) || 0) * pct) / 100;
+};
+
 export const seed = () => ({
   id: 1,
   subs: [],
@@ -81,14 +87,14 @@ export const mu = (amount, currency) => {
 
 export const lab = (listKey, id) => (S[listKey]?.find(item => item.id == id) || {}).label || '—';
 
-export const annual = sub => (cv(sub.amount, sub.currency) * 12) / CYC[sub.billingCycle];
+export const annual = sub => (cv(userAmount(sub), sub.currency) * 12) / CYC[sub.billingCycle];
 
 export const addPay = (sub, payment) => {
   S.pays.push({
     id: S.id++,
     subId: sub.id,
     date: payment.date,
-    amount: sub.amount,
+    amount: userAmount(sub),
     cur: sub.currency,
     from: payment.from,
     to: payment.to,
@@ -159,8 +165,20 @@ export const sumP = filterFn =>
 
 export const applyTheme = () => {
   const theme = S.cfg?.theme || 'dark';
-  const isDark = theme === 'dark' || (theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
-  document.documentElement.classList.toggle('dark', isDark);
+  const isLight = theme === 'light' || (theme === 'system' && matchMedia('(prefers-color-scheme: light)').matches);
+  document.documentElement.classList.toggle('light', isLight);
+  document.documentElement.classList.toggle('dark', !isLight);
+};
+
+export const getLogoUrl = sub => {
+  if (sub.website) {
+    try {
+      const url = new URL(sub.website.startsWith('http') ? sub.website : `https://${sub.website}`);
+      return `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=64`;
+    } catch {}
+  }
+  const cleanName = sub.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return `https://www.google.com/s2/favicons?domain=${cleanName}.com&sz=64`;
 };
 
 const USERS_KEY = 'rb-users';
