@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <!-- Background Ambient Glow -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e1e2d" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#0a0a10" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Metallic Gold Gradients -->
+    <linearGradient id="goldLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF2B2"/>
+      <stop offset="25%" stop-color="#E5C158"/>
+      <stop offset="50%" stop-color="#9E7618"/>
+      <stop offset="75%" stop-color="#F2D779"/>
+      <stop offset="100%" stop-color="#73510A"/>
+    </linearGradient>
+
+    <linearGradient id="goldRim" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8C6311"/>
+      <stop offset="30%" stop-color="#EED57B"/>
+      <stop offset="65%" stop-color="#FFF5C0"/>
+      <stop offset="100%" stop-color="#A87A1E"/>
+    </linearGradient>
+
+    <linearGradient id="goldEdge" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C29A38"/>
+      <stop offset="50%" stop-color="#6E500C"/>
+      <stop offset="100%" stop-color="#3D2B04"/>
+    </linearGradient>
+
+    <!-- Dark Disc Gradient -->
+    <radialGradient id="darkFace" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#2a2d38"/>
+      <stop offset="60%" stop-color="#14151b"/>
+      <stop offset="100%" stop-color="#0b0c0f"/>
+    </radialGradient>
+
+    <!-- Swoosh Metallic Indigo/Purple Gradients -->
+    <linearGradient id="swooshPrimary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6B7A99"/>
+      <stop offset="40%" stop-color="#3B475F"/>
+      <stop offset="80%" stop-color="#212738"/>
+      <stop offset="100%" stop-color="#4A1E35"/>
+    </linearGradient>
+
+    <linearGradient id="swooshSecondary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4B5875"/>
+      <stop offset="50%" stop-color="#2A3347"/>
+      <stop offset="100%" stop-color="#3D1C30"/>
+    </linearGradient>
+
+    <linearGradient id="swooshTrail" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5B2C4D" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#1B1C2B" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Drop Shadows -->
+    <filter id="shadowCoin" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="4" dy="12" stdDeviation="12" flood-color="#000000" flood-opacity="0.65"/>
+    </filter>
+
+    <filter id="shadowSwoosh" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="-6" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Ambient Glow -->
+  <circle cx="400" cy="400" r="360" fill="url(#bgGlow)" />
+
+  <g transform="translate(0, 20)">
+
+    <!-- BACK SWOOSH / REWIND TRAIL -->
+    <g filter="url(#shadowSwoosh)">
+      <!-- Outer Curved Tail -->
+      <path d="M 220 380 C 180 480 230 600 350 630 C 270 600 220 500 250 410 Z" fill="url(#swooshTrail)" />
+      
+      <!-- Second Arrow Swoosh -->
+      <path d="M 390 120 
+               C 520 130 670 200 690 320 
+               C 620 230 500 180 370 180 
+               L 260 290 
+               C 240 310 210 310 190 290 
+               L 160 260 
+               C 145 245 145 220 160 205 
+               L 330 30 
+               C 345 15 370 15 385 30 
+               Z" 
+            fill="url(#swooshSecondary)" />
+      
+      <!-- First Front Arrow Swoosh -->
+      <path d="M 270 60 
+               C 380 70 520 130 550 250 
+               C 490 170 380 120 270 120 
+               L 160 230 
+               C 140 250 110 250 90 230 
+               L 70 210 
+               C 55 195 55 170 70 155 
+               L 210 -10 
+               C 225 -25 250 -25 265 -10 
+               Z" 
+            transform="translate(10, 80)"
+            fill="url(#swooshPrimary)" />
+    </g>
+
+    <!-- RIGHT COIN STACK -->
+    <g filter="url(#shadowCoin)">
+      <!-- Stack Layer 4 (Bottom) -->
+      <g transform="translate(530, 480)">
+        <path d="M -110 0 L -110 30 A 110 42 0 0 0 110 30 L 110 0 Z" fill="url(#goldEdge)" />
+        <ellipse cx="0" cy="0" rx="110" ry="42" fill="url(#goldRim)" />
+      </g>
+      
+      <!-- Stack Layer 3 -->
+      <g transform="translate(530, 435)">
+        <path d="M -110 0 L -110 30 A 110 42 0 0 0 110 30 L 110 0 Z" fill="url(#goldEdge)" />
+        <ellipse cx="0" cy="0" rx="110" ry="42" fill="url(#goldRim)" />
+      </g>
+
+      <!-- Stack Layer 2 -->
+      <g transform="translate(530, 390)">
+        <path d="M -110 0 L -110 30 A 110 42 0 0 0 110 30 L 110 0 Z" fill="url(#goldEdge)" />
+        <ellipse cx="0" cy="0" rx="110" ry="42" fill="url(#goldRim)" />
+      </g>
+
+      <!-- Stack Layer 1 (Top Coin of Stack) -->
+      <g transform="translate(530, 345)">
+        <path d="M -110 0 L -110 30 A 110 42 0 0 0 110 30 L 110 0 Z" fill="url(#goldEdge)" />
+        <ellipse cx="0" cy="0" rx="110" ry="42" fill="url(#goldRim)" />
+        <ellipse cx="0" cy="0" rx="96" ry="35" fill="url(#goldLight)" />
+        <!-- Radial Inner Polish -->
+        <ellipse cx="0" cy="-2" rx="84" ry="29" fill="none" stroke="url(#goldRim)" stroke-width="3" />
+      </g>
+    </g>
+
+    <!-- MAIN FRONT EMBLEM COIN -->
+    <g transform="translate(390, 500)" filter="url(#shadowCoin)">
+      <!-- Outer Beveled Gold Ring -->
+      <circle cx="0" cy="0" r="160" fill="url(#goldRim)" />
+      <circle cx="0" cy="0" r="148" fill="url(#goldEdge)" />
+      <circle cx="0" cy="0" r="142" fill="url(#goldLight)" />
+      <circle cx="0" cy="0" r="124" fill="#141108" />
+
+      <!-- Dark Matte Inner Disc -->
+      <circle cx="0" cy="0" r="118" fill="url(#darkFace)" />
+      <circle cx="0" cy="0" r="116" fill="none" stroke="#383c4a" stroke-width="2" />
+
+      <!-- Embossed Checkmark Emblem -->
+      <path d="M -42 2 L -12 34 L 48 -28" 
+            fill="none" 
+            stroke="#4A3409" 
+            stroke-width="32" 
+            stroke-linecap="round" 
+            stroke-linejoin="round" 
+            transform="translate(2, 4)"/>
+
+      <path d="M -42 2 L -12 34 L 48 -28" 
+            fill="none" 
+            stroke="url(#goldRim)" 
+            stroke-width="28" 
+            stroke-linecap="round" 
+            stroke-linejoin="round" />
+
+      <path d="M -42 2 L -12 34 L 48 -28" 
+            fill="none" 
+            stroke="url(#goldLight)" 
+            stroke-width="20" 
+            stroke-linecap="round" 
+            stroke-linejoin="round" />
+    </g>
+
+  </g>
+</svg>
