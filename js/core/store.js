@@ -28,7 +28,7 @@ export const seed = () => ({
     'Credit Card', 'Debit Card', 'PayPal', 'Apple Pay',
     'Google Pay', 'Bank Transfer', 'Cryptocurrency', 'Other'
   ].map((label, index) => ({ id: index + 1, label })),
-  cfg: { cur: 'PHP', orig: true, theme: 'dark', rates: { ...RATES } }
+  cfg: { cur: 'PHP', orig: true, theme: 'dark', rates: { ...RATES }, salary: 0 }
 });
 
 export let S;
@@ -37,6 +37,7 @@ try {
   if (S && S.cfg) {
     S.cfg.rates = { ...RATES, ...(S.cfg.rates || {}) };
     if (!S.cfg.cur) S.cfg.cur = 'PHP';
+    if (S.cfg.salary === undefined) S.cfg.salary = 0;
   }
 } catch {
   S = seed();

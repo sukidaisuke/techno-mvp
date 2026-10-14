@@ -1050,3 +1050,125 @@ select option {
 .full-width {
   grid-column: 1 / -1;
 }
+
+/* Salary & Net Income Card in Reports */
+.salary-card {
+  background: var(--card);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--bd);
+  border-radius: var(--r);
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.salary-input-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--bd);
+  padding: 16px 20px;
+  border-radius: 14px;
+}
+
+.salary-input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 260px;
+  justify-content: flex-end;
+}
+
+.salary-input-group span {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--mf);
+}
+
+.salary-input-group input {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 8px 12px 8px 12px;
+  border-radius: 10px;
+  max-width: 200px;
+  text-align: right;
+}
+
+.salary-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.salary-stat-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.salary-stat-item small {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: var(--mf);
+}
+
+.salary-stat-item b {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.balance-positive {
+  color: #34d399 !important;
+}
+
+.balance-negative {
+  color: #f87171 !important;
+}
+
+.budget-progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.budget-bar-track {
+  height: 10px;
+  border-radius: 99px;
+  background: var(--mut);
+  overflow: hidden;
+  border: 1px solid var(--bd);
+  width: 100%;
+}
+
+.budget-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.budget-bar-fill.healthy {
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+}
+
+.budget-bar-fill.warning {
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+}
+
+.budget-bar-fill.danger {
+  background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+}
