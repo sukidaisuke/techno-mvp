@@ -48,7 +48,8 @@ export const renderReports = () => {
     healthBadgeClass = 'due';
   }
 
-  // Monthly trend for past 12 months
+  // Monthly trend for past 12 months with short month names
+  const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const now = new Date();
   const monthsList = [];
   for (let i = 11; i >= 0; i--) {
@@ -57,7 +58,7 @@ export const renderReports = () => {
     const monthNum = String(d.getMonth() + 1).padStart(2, '0');
     const ym = `${year}-${monthNum}`;
     const total = typeof sumP === 'function' ? sumP(dateStr => dateStr && dateStr.startsWith(ym)) : 0;
-    monthsList.push({ ym, label: monthNum, total: isNaN(total) ? 0 : total });
+    monthsList.push({ ym, label: MONTH_NAMES[d.getMonth()], total: isNaN(total) ? 0 : total });
   }
 
   const maxMonthVal = Math.max(...monthsList.map(m => m.total), 1);
